@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query, Patch, Delete } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, Patch, Delete, HttpCode, HttpStatus } from "@nestjs/common";
 import { PropertyService } from "./property.service.js";
 import { CreatePropertyDto } from "./dto/create-property.dto.js";
 import { UpdatePropertyDto } from "./dto/update-property.dto.js";
+import { PropertyQueryDto } from "./dto/property-query.dto.js";
 
 @Controller('properties')
 export class PropertyController{
@@ -10,11 +11,9 @@ export class PropertyController{
 
     @Get()
     getAllProperties(
-        @Query('city') city: string,
-        @Query('bedrooms') bedrooms: string,
-        @Query('maxRent') maxRent: string,
+        @Query() query: PropertyQueryDto
     ){
-        return this.propertyService.getAllProperties()
+        return this.propertyService.getAllProperties(query)
     }
 
     @Get(':id')
@@ -40,9 +39,10 @@ export class PropertyController{
     }
 
     @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
     deleteProperty(
         @Param('id') id: string,
     ){
-        return 'Property deleted '+id
+        return this.propertyService.deleteProperty(id)
     }
 }
