@@ -40,7 +40,7 @@ export class PropertyService {
             available: true,
             ownerId: '444',
             rent: 27000
-        },{
+        }, {
             id: "444",
             name: "Shivam flat",
             type: "Individual Flat",
@@ -50,12 +50,103 @@ export class PropertyService {
             available: true,
             ownerId: '444',
             rent: 22000
+        },
+        {
+            id: "555",
+            name: "Piyush flat",
+            type: "Individual Flat",
+            bedrooms: 2,
+            city: 'Delhi',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '222',
+            rent: 29000
+        },
+        {
+            id: "666",
+            name: "Ritik flat",
+            type: "Individual Flat",
+            bedrooms: 1,
+            city: 'Gurgaon',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '444',
+            rent: 23700
+        },
+        {
+            id: "777",
+            name: "Preeti flat",
+            type: "Individual Flat",
+            bedrooms: 4,
+            city: 'Gurgaon',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '444',
+            rent: 30000
+        }, {
+            id: "888",
+            name: "Shivam flat",
+            type: "Individual Flat",
+            bedrooms: 2,
+            city: 'Gurgaon',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '444',
+            rent: 12000
+        }, {
+            id: "999",
+            name: "Piyush flat",
+            type: "Individual Flat",
+            bedrooms: 2,
+            city: 'Delhi',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '222',
+            rent: 25000
+        },
+        {
+            id: "1000",
+            name: "Ritik flat",
+            type: "Individual Flat",
+            bedrooms: 1,
+            city: 'Gurgaon',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '444',
+            rent: 29000
+        },
+        {
+            id: "1100",
+            name: "Preeti flat",
+            type: "Individual Flat",
+            bedrooms: 4,
+            city: 'Gurgaon',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '444',
+            rent: 35000
+        }, {
+            id: "1200",
+            name: "Shivam flat",
+            type: "Individual Flat",
+            bedrooms: 2,
+            city: 'Gurgaon',
+            locality: 'IFFCO chowk',
+            available: true,
+            ownerId: '444',
+            rent: 37000
         }
     ]
 
     getAllProperties(query: PropertyQueryDto) {
         let filteredProperties = this.properties;
-        const { city, bedrooms, maxRent, locality, type, minRent, sortBy, order } = query;
+        const { city, bedrooms, maxRent, locality, type, minRent, sortBy, order, page, limit } = query;
+        let startingIndex = 0
+
+
+        startingIndex = (page - 1) * limit
+
+
 
         if (city) {
             filteredProperties = filteredProperties.filter(
@@ -94,16 +185,23 @@ export class PropertyService {
         }
 
         const filteredSortedProperties = [...filteredProperties]
-        if(sortBy){
-            if(order && order === 'desc'){
-                filteredSortedProperties.sort((a,b)=> b.rent - a.rent)
-            }else{
-                filteredSortedProperties.sort((a,b)=> a.rent - b.rent)
+        if (sortBy) {
+            if (order && order === 'desc') {
+                filteredSortedProperties.sort((a, b) => b.rent - a.rent)
+            } else {
+                filteredSortedProperties.sort((a, b) => a.rent - b.rent)
             }
         }
 
+        const propertiesToReturn = filteredSortedProperties.slice(startingIndex, startingIndex + limit)
+
         return {
-            data: filteredSortedProperties,
+            data: propertiesToReturn,
+            "pagination": {
+                "page": page,
+                "limit": limit,
+                "total": filteredSortedProperties.length
+            }
         };
     }
 
