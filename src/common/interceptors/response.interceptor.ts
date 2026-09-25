@@ -17,7 +17,6 @@ import {
   
       return next.handle().pipe(
         map((data) => {
-          console.log(data)
           return {
             "status":"Success",
             "data":data
