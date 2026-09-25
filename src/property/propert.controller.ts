@@ -1,13 +1,17 @@
-import { Body, Controller, Get, Param, Post, Query, Patch, Delete, HttpCode, HttpStatus, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, Patch, Delete, HttpCode, HttpStatus, UseGuards, UseInterceptors, UseFilters } from "@nestjs/common";
 import { PropertyService } from "./property.service.js";
 import { CreatePropertyDto } from "./dto/create-property.dto.js";
 import { UpdatePropertyDto } from "./dto/update-property.dto.js";
 import { PropertyQueryDto } from "./dto/property-query.dto.js";
 import { ApiKeyGuard } from "../common/guards/api-key.guard.js";
 import { LoggingInterceptor } from "../common/interceptors/logging.interceptor.js";
+import { ResponseInterceptor } from "../common/interceptors/response.interceptor.js";
+import { HttpExceptionFilter } from "../common/filters/http-exception.filter.js";
 
 @UseGuards(ApiKeyGuard)
 @UseInterceptors(LoggingInterceptor)
+@UseInterceptors(ResponseInterceptor)
+@UseFilters(HttpExceptionFilter)
 @Controller('properties')
 export class PropertyController {
 
